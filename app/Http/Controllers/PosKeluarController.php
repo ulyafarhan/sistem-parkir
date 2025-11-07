@@ -44,13 +44,17 @@ class PosKeluarController extends Controller
         $jam_masuk = Carbon::parse($transaksi->jam_masuk);
         $jam_keluar = Carbon::now();
 
-        // 6. Hitung durasi (dalam jam)
-        $total_jam = $jam_masuk->diffInHours($jam_keluar);
+        // 6. Hitung durasi (dalam jam, TAPI DENGAN DESIMAL/PRESISI)
+        //    Gunakan diffInMinutes untuk akurasi, lalu bagi 60
+        $total_jam_presisi = $jam_masuk->diffInMinutes($jam_keluar) / 60;
 
-        // 7. Hitung total hari (Rumus: ceil(jam / 24))
-        $total_hari = ceil($total_jam / 24);
+        // 7. Hitung total hari (Rumus: ceil(total_jam_presisi / 24))
+        //    Ini akan membulatkan ke atas per 24 jam.
+        //    Cth: 24.01 jam (hasil dari 24 jam 1 menit) -> ceil(24.01 / 24) -> ceil(1.0004) -> 2 hari
+        $total_hari = ceil($total_jam_presisi / 24);
 
         // 8. Pastikan minimal 1 hari
+        //    Jika parkir 1 menit (0.016 jam), ceil(0.016 / 24) = 1.
         $total_hari = max(1, $total_hari);
 
         // 9. Ambil tarif
