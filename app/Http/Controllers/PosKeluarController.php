@@ -17,7 +17,7 @@ class PosKeluarController extends Controller
     public function scan(Request $request): JsonResponse
     {
         // 1. Ambil id_tiket dari request JavaScript
-        $id_tiket = $request->input('id_tiket');
+        $id_tiket = trim($request->input('id_tiket'));
 
         // 2. Temukan transaksi
         $transaksi = Transaksi::find($id_tiket);

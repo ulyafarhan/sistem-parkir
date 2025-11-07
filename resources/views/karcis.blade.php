@@ -28,11 +28,8 @@
             </p>
         </div>
 
-        {{-- 
-          Ini adalah QR Code yang akan di-scan [cite: 37]
-          Isinya adalah 'id_tiket'
-        --}}
-        <div class="flex justify-center mb-4">
+        {{-- 1. KEMBALIKAN KE SVG (INI TIDAK BUTUH IMAGICK) --}}
+        <div class="flex justify-center mb-4" id="qrcode-container">
             {!! QrCode::size(250)->generate($transaksi->id_tiket) !!}
         </div>
         
@@ -40,10 +37,48 @@
             {{ $transaksi->id_tiket }}
         </p>
 
+        {{-- 2. TAMBAHKAN TOMBOL DOWNLOAD --}}
+        <button onclick="downloadQR()" class="
+            bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow
+            hover:bg-blue-700 transition duration-200 mb-4
+        ">
+            Download Karcis (QR)
+        </button>
+
         <p class="text-sm text-red-600">
             Simpan karcis ini untuk proses keluar.
         </p>
     </div>
+
+    {{-- 3. TAMBAHKAN SCRIPT UNTUK FUNGSI DOWNLOAD --}}
+    <script>
+        function downloadQR() {
+            // Ambil elemen SVG
+            const svgElement = document.querySelector("#qrcode-container svg");
+            
+            // Konversi SVG ke teks
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgElement);
+
+            // Buat file virtual
+            const blob = new Blob([svgString], {type: "image/svg+xml"});
+            const url = URL.createObjectURL(blob);
+            
+            // Buat link download palsu
+            const link = document.createElement("a");
+            link.href = url;
+            // Tentukan nama file download
+            link.download = "karcis-{{ $transaksi->id_tiket }}.svg"; 
+            
+            // Klik link palsu secara otomatis
+            document.body.appendChild(link);
+            link.click();
+            
+            // Hapus link palsu
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    </script>
 
 </body>
 </html>

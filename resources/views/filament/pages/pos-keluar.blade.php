@@ -58,8 +58,8 @@
     </div>
 
 
-    {{-- 1. Import Library Scanner --}}
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    {{-- 1. Import Library Scanner (dari file lokal) --}}
+    <script src="{{ asset('html5-qrcode.min.js') }}"></script>
 
     <script>
         // Ambil elemen-elemen UI
@@ -70,7 +70,9 @@
 
         // Fungsi yang dipanggil saat QR Code berhasil ter-scan
         function onScanSuccess(decodedText, decodedResult) {
-            // Hentikan scanner agar tidak scan berulang-ulang
+            console.log("Scanner membaca ID:", decodedText);
+
+            // Suspend scanner
             html5QrcodeScanner.pause();
 
             // Tampilkan loading (opsional)
