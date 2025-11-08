@@ -10,21 +10,25 @@ class JenisKendaraanPage extends Component
 {
     use WithPagination;
 
-    public $nama;
-    public $tarif_per_jam;
+    public $nama_jenis;
+    public $tarif_per_hari;
     
     public $selectedId;
     public $isModalOpen = false;
 
     protected $rules = [
-        'nama' => 'required|string|max:255',
-        'tarif_per_jam' => 'required|numeric|min:0',
+        'nama_jenis' => 'required|string|max:255',
+        'tarif_per_hari' => 'required|numeric|min:0',
     ];
 
     public function render()
     {
+        $allJenisKendaraans = JenisKendaraan::all();
+        $jenisKendaraansPaginated = JenisKendaraan::paginate(10);
+
         return view('livewire.jenis-kendaraan-page', [
-            'jenisKendaraans' => JenisKendaraan::paginate(10)
+            'allJenisKendaraans' => $allJenisKendaraans,
+            'jenisKendaraans' => $jenisKendaraansPaginated
         ])->layout('layouts.app'); 
     }
 
@@ -41,8 +45,8 @@ class JenisKendaraanPage extends Component
 
     private function resetForm()
     {
-        $this->nama = '';
-        $this->tarif_per_jam = '';
+        $this->nama_jenis = '';
+        $this->tarif_per_hari = '';
         $this->selectedId = null;
         $this->resetErrorBag();
     }
@@ -52,10 +56,10 @@ class JenisKendaraanPage extends Component
         $this->validate();
 
         JenisKendaraan::updateOrCreate(
-            ['id_jenis_kendaraan' => $this->selectedId], 
+            ['id_jenis' => $this->selectedId], 
             [
-                'nama' => $this->nama,
-                'tarif_per_jam' => $this->tarif_per_jam,
+                'nama_jenis' => $this->nama_jenis,
+                'tarif_per_hari' => $this->tarif_per_hari,
             ]
         );
 
@@ -69,8 +73,8 @@ class JenisKendaraanPage extends Component
     {
         $jenis = JenisKendaraan::findOrFail($id);
         $this->selectedId = $id;
-        $this->nama = $jenis->nama;
-        $this->tarif_per_jam = $jenis->tarif_per_jam;
+        $this->nama_jenis = $jenis->nama_jenis;
+        $this->tarif_per_hari = $jenis->tarif_per_hari;
         
         $this->openModal();
     }

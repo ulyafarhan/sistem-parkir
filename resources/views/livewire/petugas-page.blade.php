@@ -1,8 +1,8 @@
 <div class="container mx-auto p-8">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">Manajemen User</h1>
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Manajemen Petugas</h1>
 
     <button wire:click="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 shadow-lg">
-        Tambah User Baru
+        Tambah Petugas Baru
     </button>
     
     @if (session()->has('message'))
@@ -20,18 +20,12 @@
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
             <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
                 <form wire:submit.prevent="store">
-                    <h3 class="text-2xl font-medium mb-4">{{ $selectedId ? 'Edit' : 'Tambah' }} User</h3>
+                    <h3 class="text-2xl font-medium mb-4">{{ $selectedId ? 'Edit' : 'Tambah' }} Petugas</h3>
                     
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Nama</label>
-                        <input type="text" wire:model="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" wire:model="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        <label class="block text-sm font-medium text-gray-700">Nama Petugas</label>
+                        <input type="text" wire:model="nama_petugas" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        @error('nama_petugas') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-4">
@@ -65,33 +59,30 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Petugas</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($users as $user)
+                @forelse ($petugas as $p)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $user->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $user->email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $p->nama_petugas }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button wire:click="edit({{ $user->id }})" class="text-indigo-600 hover:text-indigo-900">Edit</button>
-                            <button wire:click="delete({{ $user->id }})" onclick="return confirm('Yakin hapus user ini?')" class="text-red-600 hover:text-red-900 ml-4">Hapus</button>
+                            <button wire:click="edit({{ $p->id_petugas }})" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                            <button wire:click="delete({{ $p->id_petugas }})" onclick="return confirm('Yakin hapus user ini?')" class="text-red-600 hover:text-red-900 ml-4">Hapus</button>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">
-                            Tidak ada data user.
+                        <td colspan="2" class="px-6 py-4 text-center text-gray-500">
+                            Tidak ada data petugas.
                         </td>
                     </tr>
-                @endforelse
-            </tbody>
+                @endforelse </tbody>
         </table>
     </div>
     
     <div class="mt-4">
-        {{ $users->links() }}
+        {{ $petugas->links() }}
     </div>
 </div>

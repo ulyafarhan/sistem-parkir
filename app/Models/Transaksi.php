@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Petugas; // Pastikan ini Petugas, bukan User
 
 class Transaksi extends Model
 {
@@ -24,11 +25,17 @@ class Transaksi extends Model
 
     public function jenisKendaraan(): BelongsTo
     {
-        return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk');
+        // ==============================================================
+        // PERBAIKAN:
+        // Tambahkan parameter ketiga ('id_jenis') 
+        // untuk memberi tahu Laravel bahwa Primary Key di tabel 
+        // JenisKendaraan adalah 'id_jenis', BUKAN 'id'.
+        // ==============================================================
+        return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk', 'id_jenis');
     }
 
     public function petugas(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_petugas_fk');
+        return $this->belongsTo(Petugas::class, 'id_petugas_fk', 'id_petugas');
     }
 }

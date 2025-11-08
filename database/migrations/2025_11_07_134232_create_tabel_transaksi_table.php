@@ -16,8 +16,7 @@ return new class extends Migration
             $table->dateTime('jam_masuk');
             $table->dateTime('jam_keluar')->nullable();
             $table->unsignedInteger('total_biaya')->default(0);
-            $table->foreignId('id_jenis_fk')
-                  ->constrained('tabel_jenis_kendaraan', 'id_jenis');
+            $table->foreignId('id_petugas_fk')->nullable()->constrained('tabel_petugas', 'id_petugas')->onDelete('set null');
             $table->foreignId('id_petugas_fk')
                   ->nullable()
                   ->constrained('users', 'id') 
