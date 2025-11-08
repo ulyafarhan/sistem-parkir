@@ -21,6 +21,7 @@ class User extends Authenticatable
         'nama_petugas',
         'email',
         'password',
+        'shift',
     ];
 
     /**

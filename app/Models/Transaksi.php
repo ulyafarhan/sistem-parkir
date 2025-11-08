@@ -1,19 +1,41 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Petugas; // Pastikan ini Petugas, bukan User
+use App\Models\User; // <-- TAMBAHKAN BARIS INI
 
 class Transaksi extends Model
 {
     use HasFactory;
-    protected $table = 'tabel_transaksi';
+
+    /**
+     * Nama tabel yang digunakan oleh model.
+     *
+     * @var string
+     */
+    protected $table = 'tabel_transaksi'; // Pastikan ini sesuai dengan migrasi
+
+    /**
+     * Primary key dari tabel.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id_tiket';
-    public $incrementing = false;
+
+    /**
+     * Tipe data primary key.
+     *
+     * @var string
+     */
     protected $keyType = 'string';
 
+    /**
+     * Atribut yang dapat diisi secara massal.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'id_tiket',
         'jam_masuk',
@@ -23,19 +45,21 @@ class Transaksi extends Model
         'id_petugas_fk',
     ];
 
-    public function jenisKendaraan(): BelongsTo
+    /**
+     * Relasi ke JenisKendaraan.
+     */
+    public function jenisKendaraan()
     {
-        // ==============================================================
-        // PERBAIKAN:
-        // Tambahkan parameter ketiga ('id_jenis') 
-        // untuk memberi tahu Laravel bahwa Primary Key di tabel 
-        // JenisKendaraan adalah 'id_jenis', BUKAN 'id'.
-        // ==============================================================
         return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk', 'id_jenis');
     }
 
-    public function petugas(): BelongsTo
+    /**
+     * Relasi ke Petugas (User).
+     * INI ADALAH PERBAIKANNYA
+     */
+    public function petugas()
     {
-        return $this->belongsTo(Petugas::class, 'id_petugas_fk', 'id_petugas');
+        // Ubah App\Models\Petugas::class menjadi User::class
+        return $this->belongsTo(User::class, 'id_petugas_fk', 'id');
     }
 }
