@@ -3,73 +3,58 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Petugas; 
+use App\Models\User; 
 use Illuminate\Support\Facades\Hash;
-use Livewire\WithPagination;
+use Illuminate\Validation\Rule;
 
 class PetugasPage extends Component
 {
-    use WithPagination;
-
-    // Sesuaikan properti dengan database
-    public $nama_petugas;
-    public $password;
-    public $password_confirmation;
+    public $petugasList = []; // Ganti nama variabel agar tidak bingung
+    public $nama_petugas, $email, $password, $password_confirmation;
     
-    public $selectedId;
-    public $isModalOpen = false;
+    public $selectedId, $isEditing = false;
 
+    // Aturan validasi
     protected function rules()
     {
-        // Validasi untuk user baru
-        if (!$this->selectedId) {
-            return [
-                'nama_petugas' => 'required|string|max:255',
-                'password' => 'required|min:6|confirmed',
-            ];
-        }
-        
-        // Validasi untuk edit user (password boleh kosong)
         return [
             'nama_petugas' => 'required|string|max:255',
-            'password' => 'nullable|min:6|confirmed',
+            // Pastikan email unik, KECUALI untuk ID yang sedang diedit
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($this->selectedId),
+            ],
+            // Password hanya wajib saat membuat baru
+            'password' => $this->isEditing ? 'nullable|min:8|confirmed' : 'required|min:8|confirmed',
         ];
     }
 
-    public function render()
+    public function mount()
     {
-        return view('livewire.petugas-page', [
-            // Ambil data dari Model Petugas
-            'petugas' => Petugas::paginate(10)
-        ])->layout('layouts.app');
+        $this->loadPetugas();
     }
 
-    public function openModal()
+    // Fungsi untuk me-load data
+    public function loadPetugas()
     {
-        $this->resetForm();
-        $this->isModalOpen = true;
+        $this->petugasList = User::all(); // <-- DIUBAH: Mengambil dari User
     }
 
-    public function closeModal()
+    // Fungsi untuk reset form
+    public function resetForm()
     {
-        $this->isModalOpen = false;
+        $this->reset(['nama_petugas', 'email', 'password', 'password_confirmation', 'selectedId', 'isEditing']);
     }
 
-    private function resetForm()
-    {
-        $this->nama_petugas = '';
-        $this->password = '';
-        $this->password_confirmation = '';
-        $this->selectedId = null;
-        $this->resetErrorBag();
-    }
-
-    public function store()
+    public function save()
     {
         $this->validate();
 
         $data = [
             'nama_petugas' => $this->nama_petugas,
+            'email' => $this->email,
         ];
 
         // Hanya update password jika diisi
@@ -77,39 +62,49 @@ class PetugasPage extends Component
             $data['password'] = Hash::make($this->password);
         }
 
-        // Gunakan Primary Key 'id_petugas'
-        if ($this->selectedId) {
-            $petugas = Petugas::findOrFail($this->selectedId);
-            $petugas->update($data);
+        if ($this->isEditing) {
+            // Update data
+            $user = User::find($this->selectedId); // <-- DIUBAH
+            if ($user) {
+                $user->update($data);
+            }
         } else {
-            Petugas::create($data);
+            // Buat data baru
+            User::create($data); // <-- DIUBAH
         }
 
-        session()->flash('message', 
-            $this->selectedId ? 'Petugas Berhasil Diperbarui.' : 'Petugas Berhasil Dibuat.');
-
-        $this->closeModal();
+        $this->loadPetugas();
+        $this->resetForm();
     }
 
     public function edit($id)
     {
-        // Cari berdasarkan Model Petugas
-        $petugas = Petugas::findOrFail($id);
-        $this->selectedId = $id;
-        $this->nama_petugas = $petugas->nama_petugas;
-        
-        $this->openModal();
+        $user = User::findOrFail($id); // <-- DIUBAH
+        $this->selectedId = $user->id;
+        $this->nama_petugas = $user->nama_petugas;
+        $this->email = $user->email;
+        $this->isEditing = true;
+    }
+
+    public function cancelEdit()
+    {
+        $this->resetForm();
     }
 
     public function delete($id)
     {
-        // Cek agar tidak hapus diri sendiri (jika diperlukan)
+        // Jangan biarkan user menghapus akunnya sendiri
         if ($id == auth()->id()) {
-            session()->flash('error', 'Anda tidak bisa menghapus akun Anda sendiri.');
+            session()->flash('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
             return;
         }
 
-        Petugas::findOrFail($id)->delete();
-        session()->flash('message', 'Petugas Berhasil Dihapus.');
+        User::find($id)->delete(); // <-- DIUBAH
+        $this->loadPetugas();
+    }
+
+    public function render()
+    {
+        return view('livewire.petugas-page')->layout('layouts.app');
     }
 }

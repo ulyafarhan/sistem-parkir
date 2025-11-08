@@ -33,7 +33,7 @@ class PosKeluarController extends Controller
         $id_tiket = $request->id_tiket;
         $transaksi = Transaksi::find($id_tiket);
 
-        // 1. Validasi Tiket (Pastikan belum pernah keluar)
+        // 1. Validasi Tiket (Pastikan belum pernah keluar) [cite: 1611]
         if ($transaksi->jam_keluar !== null) {
             return response()->json([
                 'status' => 'error',
@@ -47,20 +47,30 @@ class PosKeluarController extends Controller
         $jam_keluar = Carbon::now();
         $tarif_per_hari = $jenis->tarif_per_hari;
 
-        // 3. Hitung Durasi (Logika Bisnis Sesuai Spesifikasi)
-        // Hitung selisih waktu dalam jam
-        $total_jam = $jam_keluar->diffInHours($jam_masuk);
+        // 3. Hitung Durasi (Logika Bisnis Sesuai Spesifikasi) 
+        
+        // --- PERBAIKAN LOGIKA DIMULAI ---
+        
+        // Hitung selisih waktu dalam menit untuk presisi
+        $total_menit = $jam_keluar->diffInMinutes($jam_masuk);
 
-        // Hitung total_hari dengan rumus: ceil($total_jam / 24)
+        // Ubah menit ke jam (dalam desimal, cth: 90 menit = 1.5 jam)
+        $total_jam = $total_menit / 60;
+        
+        // Hitung total_hari dengan rumus: ceil($total_jam / 24) 
+        // Cth: 1.5 jam -> ceil(1.5 / 24) -> ceil(0.0625) -> 1 hari
+        // Cth: 25 jam -> ceil(25 / 24) -> ceil(1.04) -> 2 hari
         $total_hari = ceil($total_jam / 24);
 
-        // Pastikan minimal 1 hari
+        // Pastikan minimal 1 hari [cite: 1705]
         $total_hari = max(1, $total_hari);
         
+        // --- PERBAIKAN LOGIKA SELESAI ---
+
         // 4. Hitung Total Biaya
         $total_biaya = $total_hari * $tarif_per_hari;
 
-        // 5. Update Database
+        // 5. Update Database [cite: 1614, 1708]
         $transaksi->update([
             'jam_keluar' => $jam_keluar,
             'total_biaya' => $total_biaya,

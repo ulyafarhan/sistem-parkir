@@ -1,18 +1,21 @@
 @extends('layouts.app')
 
-@section('content')
+{{-- UBAH INI --}}
+@section('slot') 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                {{-- Saya ganti label "Name" menjadi "Nama Petugas" seperti saran sebelumnya --}}
+                <div class="card-header">Register Petugas Baru</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                            {{-- Ini adalah perbaikan UI dari jawaban saya sebelumnya --}}
+                            <label for="name" class="col-md-4 col-form-label text-md-end">Nama Petugas</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
