@@ -10,15 +10,12 @@ class JenisKendaraanPage extends Component
 {
     use WithPagination;
 
-    // Properti untuk form (terikat dengan input)
     public $nama;
     public $tarif_per_jam;
     
-    // Properti untuk state
     public $selectedId;
     public $isModalOpen = false;
 
-    // Aturan validasi
     protected $rules = [
         'nama' => 'required|string|max:255',
         'tarif_per_jam' => 'required|numeric|min:0',
@@ -47,19 +44,23 @@ class JenisKendaraanPage extends Component
         $this->nama = '';
         $this->tarif_per_jam = '';
         $this->selectedId = null;
+        $this->resetErrorBag();
     }
 
     public function store()
     {
         $this->validate();
 
-        JenisKendaraan::updateOrCreate(['id' => $this->selectedId], [
-            'nama' => $this->nama,
-            'tarif_per_jam' => $this->tarif_per_jam,
-        ]);
+        JenisKendaraan::updateOrCreate(
+            ['id_jenis_kendaraan' => $this->selectedId], 
+            [
+                'nama' => $this->nama,
+                'tarif_per_jam' => $this->tarif_per_jam,
+            ]
+        );
 
         session()->flash('message', 
-            $this->selectedId ? 'Jenis Kendaraan Diperbarui.' : 'Jenis Kendaraan Disimpan.');
+            $this->selectedId ? 'Jenis Kendaraan Berhasil Diperbarui.' : 'Jenis Kendaraan Berhasil Disimpan.');
 
         $this->closeModal();
     }
@@ -76,7 +77,7 @@ class JenisKendaraanPage extends Component
 
     public function delete($id)
     {
-        JenisKendaraan::find($id)->delete();
-        session()->flash('message', 'Jenis Kendaraan Dihapus.');
+        JenisKendaraan::findOrFail($id)->delete();
+        session()->flash('message', 'Jenis Kendaraan Berhasil Dihapus.');
     }
 }

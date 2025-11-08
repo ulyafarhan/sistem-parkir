@@ -1,78 +1,69 @@
 <div class="container mx-auto p-8">
-    <h1 class="text-3xl font-bold mb-6">Manajemen Jenis Kendaraan</h1>
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Manajemen Jenis Kendaraan</h1>
 
-    <button wire:click="openModal()" class="btn btn-primary mb-4">
+    <button wire:click="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 shadow-lg">
         Tambah Baru
     </button>
     
     @if (session()->has('message'))
-        <div class="alert alert-success shadow-lg mb-4" role="alert">
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>{{ session('message') }}</span>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    @if($isModalOpen)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <form wire:submit.prevent="store">
+                    <h3 class="text-2xl font-medium mb-4">{{ $selectedId ? 'Edit' : 'Tambah' }} Jenis Kendaraan</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Nama Kendaraan</label>
+                        <input type="text" wire:model="nama" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        @error('nama') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Tarif per Jam</label>
+                        <input type="number" wire:model="tarif_per_jam" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        @error('tarif_per_jam') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button type="button" wire:click="closeModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                            Batal
+                        </button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     @endif
 
-    <div class="modal {{ $isModalOpen ? 'modal-open' : '' }}">
-        <div class="modal-box">
-            <form wire:submit.prevent="store">
-                <h3 class="font-bold text-lg mb-4">{{ $selectedId ? 'Edit' : 'Tambah' }} Jenis Kendaraan</h3>
-                
-                <div class="form-control w-full mb-4">
-                    <label class="label">
-                        <span class="label-text">Nama Kendaraan</span>
-                    </label>
-                    <input type="text" wire:model="nama" class="input input-bordered w-full">
-                    @error('nama')
-                        <label class="label">
-                            <span class="label-text-alt text-red-500">{{ $message }}</span>
-                        </label>
-                    @enderror
-                </div>
-
-                <div class="form-control w-full mb-4">
-                    <label class="label">
-                        <span class="label-text">Tarif per Jam</span>
-                    </label>
-                    <input type="number" wire:model="tarif_per_jam" class="input input-bordered w-full">
-                    @error('tarif_per_jam')
-                        <label class="label">
-                            <span class="label-text-alt text-red-500">{{ $message }}</span>
-                        </label>
-                    @enderror
-                </div>
-
-                <div class="modal-action mt-6">
-                    <button type="button" wire:click="closeModal()" class="btn">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="overflow-x-auto shadow-md rounded-lg">
-        <table class="table w-full">
-            <thead>
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <th>Nama</th>
-                    <th>Tarif per Jam</th>
-                    <th>Aksi</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarif per Jam</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($jenisKendaraans as $jenis)
                     <tr>
-                        <td>{{ $jenis->nama }}</td>
-                        <td>Rp {{ number_format($jenis->tarif_per_jam) }}</td>
-                        <td>
-                            <button wire:click="edit({{ $jenis->id }})" class="btn btn-ghost btn-xs">Edit</button>
-                            <button wire:click="delete({{ $jenis->id }})" onclick="return confirm('Yakin hapus?')" class="btn btn-ghost btn-xs text-red-500">Hapus</button>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $jenis->nama }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">Rp {{ number_format($jenis->tarif_per_jam) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button wire:click="edit({{ $jenis->id }})" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                            <button wire:click="delete({{ $jenis->id }})" onclick="return confirm('Yakin hapus?')" class="text-red-600 hover:text-red-900 ml-4">Hapus</button>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="text-center">
+                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">
                             Tidak ada data.
                         </td>
                     </tr>
@@ -82,6 +73,6 @@
     </div>
     
     <div class="mt-4">
-        {{ $jenisKendaraans->links('pagination::tailwind') }}
+        {{ $jenisKendaraans->links() }}
     </div>
 </div>

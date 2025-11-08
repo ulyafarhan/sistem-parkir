@@ -2,10 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\JenisKendaraanPage;
+use App\Livewire\UserPage;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/', JenisKendaraanPage::class);
+Route::get('/', JenisKendaraanPage::class)->name('jenis-kendaraan');
+Route::get('/users', UserPage::class)->name('users');
