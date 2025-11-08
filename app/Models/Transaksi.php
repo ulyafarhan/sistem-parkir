@@ -22,17 +22,11 @@ class Transaksi extends Model
         'id_petugas_fk',
     ];
 
-    /**
-     * Relasi N:1 ke JenisKendaraan (Satu Transaksi punya satu Jenis)
-     */
     public function jenisKendaraan(): BelongsTo
     {
         return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk');
     }
 
-    /**
-     * Relasi N:1 ke User/Petugas (Satu Transaksi di-handle satu Petugas)
-     */
     public function petugas(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_petugas_fk');

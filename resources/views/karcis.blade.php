@@ -37,7 +37,6 @@
             {{ $transaksi->id_tiket }}
         </p>
 
-        {{-- 2. TAMBAHKAN TOMBOL DOWNLOAD --}}
         <button onclick="downloadQR()" class="
             bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow
             hover:bg-blue-700 transition duration-200 mb-4
@@ -50,56 +49,40 @@
         </p>
     </div>
 
-    {{-- ========================================================== --}}
-    {{-- == SCRIPT DOWNLOAD BARU (KONVERSI KE PNG) == --}}
-    {{-- ========================================================== --}}
     <script>
         function downloadQR() {
-            // Ambil elemen SVG
             const svgElement = document.querySelector("#qrcode-container svg");
             
-            // Konversi SVG ke teks
             const serializer = new XMLSerializer();
             let svgString = serializer.serializeToString(svgElement);
 
-            // 1. Buat kanvas
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
             
-            // Atur ukuran kanvas (sedikit lebih besar agar kualitas bagus)
             const width = 300;
             const height = 300;
             canvas.width = width;
             canvas.height = height;
 
-            // 2. Buat Image
             const img = new Image();
             
-            // Set sumber image dari data SVG
             img.src = 'data:image/svg+xml;base64,' + btoa(svgString);
 
-            // 3. Saat image selesai di-load, gambar ke kanvas
             img.onload = function() {
-                // Set latar belakang putih (opsional, tapi bagus)
                 ctx.fillStyle = "#ffffff";
                 ctx.fillRect(0, 0, width, height);
                 
-                // Gambar SVG ke kanvas
                 ctx.drawImage(img, 0, 0, width, height);
                 
-                // 4. Buat link download dari kanvas (sebagai PNG)
                 const dataUrl = canvas.toDataURL("image/png");
                 
-                // Buat link download palsu
                 const link = document.createElement("a");
                 link.href = dataUrl;
-                link.download = "karcis-{{ $transaksi->id_tiket }}.png"; // <- Nama file .png
+                link.download = "karcis-{{ $transaksi->id_tiket }}.png";
                 
-                // Klik link palsu
                 document.body.appendChild(link);
                 link.click();
                 
-                // Hapus link palsu
                 document.body.removeChild(link);
             };
         }
