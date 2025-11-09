@@ -13,6 +13,8 @@
         <div class="text-center border-b-2 border-dashed border-gray-300 pb-4 mb-4">
             <h1 class="text-2xl font-bold text-gray-800">KARCIS PARKIR DIGITAL</h1>
             <p class="text-gray-600">Sistem Informasi Parkir</p>
+            <div class="mt-8">
+            <a href="{{ route('karcis.download', ['id_tiket' => $transaksi->id_tiket]) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Unduh Karcis</a>
         </div>
 
         <div class="mb-4">

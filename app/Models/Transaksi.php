@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User; // <-- TAMBAHKAN BARIS INI
+use App\Models\User;
 
 class Transaksi extends Model
 {
@@ -32,10 +32,16 @@ class Transaksi extends Model
     protected $keyType = 'string';
 
     /**
-     * Atribut yang dapat diisi secara massal.
+     * Indicates if the model's ID is auto-incrementing.
      *
-     * @var array<int, string>
+     * @var bool
      */
+    public $incrementing = false;
+
+    protected $casts = [
+        'jam_masuk' => 'datetime',
+        'jam_keluar' => 'datetime',
+    ];
     protected $fillable = [
         'id_tiket',
         'jam_masuk',

@@ -8,11 +8,10 @@ use App\Models\JenisKendaraan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
+use Zxing\QrReader;
+
 class PosKeluarController extends Controller
 {
-    /**
-     * Menampilkan halaman scanner Pos Keluar.
-     */
     public function index()
     {
         // Kita hanya perlu menampilkan view-nya.
@@ -24,7 +23,7 @@ class PosKeluarController extends Controller
      * Memproses tiket yang di-scan.
      * Ini adalah endpoint API yang akan dipanggil oleh JavaScript.
      */
-    public function prosesKeluar(Request $request)
+    public function scan(Request $request)
     {
         $request->validate([
             'id_tiket' => 'required|string|exists:tabel_transaksi,id_tiket',

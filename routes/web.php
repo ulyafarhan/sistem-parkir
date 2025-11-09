@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Livewire\JenisKendaraanPage;
 use App\Livewire\PetugasPage;
-use App\Livewire\RiwayatTransaksiPage; // <-- TAMBAHKAN IMPORT INI
+use App\Livewire\RiwayatTransaksiPage; 
+use App\Livewire\ManajemenKendaraanPage;
 use App\Http\Controllers\KarcisController;
 use App\Http\Controllers\PosKeluarController;
 use App\Http\Controllers\HomeController;
@@ -23,6 +24,8 @@ Route::get('/', function () {
 Route::prefix('karcis')->name('karcis.')->group(function () {
     Route::get('/show/{id_tiket}', [KarcisController::class, 'show'])
          ->name('show');
+    Route::get('/download/{id_tiket}', [KarcisController::class, 'download'])
+         ->name('download');
 });
 
 /*
@@ -55,7 +58,10 @@ Route::middleware('auth')->group(function () {
              ->name('scan');
     });
     
-    // 7. Halaman Riwayat Transaksi (INI YANG BARU)
+    // 7. Halaman Riwayat Transaksi
     Route::get('/riwayat-transaksi', RiwayatTransaksiPage::class)->name('riwayat-transaksi');
+
+    // 8. Halaman Manajemen Jenis Kendaraan
+    Route::get('/manajemen-kendaraan', ManajemenKendaraanPage::class)->name('manajemen-kendaraan');
 
 });
