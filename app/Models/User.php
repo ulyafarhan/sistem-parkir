@@ -51,10 +51,6 @@ class User extends Authenticatable
      * Method wajib dari FilamentUser
      * Menentukan apakah Petugas ini bisa mengakses Panel Admin.
      */
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return true;
-    }
 
     public function transaksi(): HasMany
     {
