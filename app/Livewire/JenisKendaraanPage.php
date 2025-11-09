@@ -9,10 +9,19 @@ class JenisKendaraanPage extends Component
 {
     public function render()
     {
-        $allJenisKendaraans = JenisKendaraan::all();
+        $jenisKendaraan = JenisKendaraan::all();
 
         return view('livewire.jenis-kendaraan-page', [
-            'jenisList' => $allJenisKendaraans, 
-        ])->layout('layouts.app'); 
+            'jenisKendaraan' => $jenisKendaraan
+        ])
+        ->layout('layouts.app', [
+            'title' => 'Gerbang Masuk'
+        ]);
+    }
+
+    public function generateKarcis($id_jenis)
+    {
+        $url = route('karcis.generate', ['id_jenis' => $id_jenis]);
+        $this->dispatch('open-new-tab', $url);
     }
 }

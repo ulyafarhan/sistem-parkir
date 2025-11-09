@@ -18,6 +18,9 @@ class RiwayatTransaksiPage extends Component
 
         return view('livewire.riwayat-transaksi-page', [
             'transaksis' => $transaksis
-        ])->layout('layouts.app');
+        ])
+        ->layout('layouts.app', [
+            'title' => 'Riwayat Transaksi' 
+        ]);
     }
 }

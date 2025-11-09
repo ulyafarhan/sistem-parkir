@@ -1,126 +1,125 @@
-<div class="container mx-auto">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Manajemen Petugas</h1>
+<div>
+    @if ($isOpen)
+        <div class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
+            <div class="w-11/12 max-w-2xl p-6 mx-auto bg-white rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">{{ $userId ? 'Edit Petugas' : 'Tambah Petugas' }}</h2>
+                
+                <form wire:submit.prevent="store">
+                    <div class="mb-4">
+                        <label for="nama_petugas" class="block text-sm font-medium text-gray-700">Nama</label>
+                        <input type="text" wire:model.defer="nama_petugas" id="nama_petugas" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        @error('nama_petugas') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" wire:model.defer="email" id="email" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        @error('email') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
 
-    @if (session()->has('error'))
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
-            <p>{{ session('error') }}</p>
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" wire:model.defer="password" id="password" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="{{ $userId ? 'Kosongkan jika tidak ganti' : '' }}">
+                        @error('password') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="shift" class="block text-sm font-medium text-gray-700">Shift</label>
+                        <select wire:model.defer="shift" id="shift" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Pilih Shift</option>
+                            <option value="Pagi">Pagi</option>
+                            <option value="Sore">Sore</option>
+                            <option value="Malam">Malam</option>
+                        </select>
+                        @error('shift') <span class="text-sm text-red-600">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" wire:click="closeModal" class="px-4 py-2 font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Batal</button>
+                        <button type="submit" class="px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">{{ $userId ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </form>
+            </div>
         </div>
     @endif
 
-    <div class="bg-white rounded-lg shadow-xl p-6 mb-8">
-        <h2 class="text-2xl font-bold mb-4">{{ $isEditing ? 'Edit Petugas' : 'Tambah Petugas Baru' }}</h2>
+    @if ($isDeleteOpen)
+        <div class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
+            <div class="w-11/12 max-w-lg p-6 mx-auto bg-white rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold mb-4">Konfirmasi Hapus</h2>
+                <p class="mb-6">Anda yakin ingin menghapus petugas ini?</p>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" wire:click="closeDeleteModal" class="px-4 py-2 font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Batal</button>
+                    <button type="button" wire:click.prevent="delete" class="px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-700">Hapus</button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="p-6 bg-white rounded-lg shadow-md">
+        <div class="flex items-center justify-between mb-6">
+            <button wire:click="create" class="px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                Tambah Petugas
+            </button>
+        </div>
         
-        <form wire:submit.prevent="save">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label for="nama_petugas" class="block text-sm font-medium text-gray-700">Nama Petugas</label>
-                    <input wire:model="nama_petugas" id="nama_petugas" type="text"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    @error('nama_petugas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email (Untuk Login)</label>
-                    <input wire:model="email" id="email" type="email"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <label for="shift" class="block text-sm font-medium text-gray-700">Shift</label>
-                    <select wire:model="shift" id="shift" 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Pilih Shift</option>
-                        <option value="Pagi">Pagi (08:00 - 16:00)</option>
-                        <option value="Sore">Sore (16:00 - 00:00)</option> <option value="Malam">Malam (00:00 - 08:00)</option>
-                    </select>
-                    @error('shift') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-
-                <div class="md:col-span-1">
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input wire:model="password" id="password" type="password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                           placeholder="{{ $isEditing ? '(Isi jika ingin ganti password)' : '' }}">
-                    @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="md:col-span-1">
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
-                    <input wire:model="password_confirmation" id="password_confirmation" type="password"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
+        @if (session()->has('message'))
+            <div class="px-4 py-3 mb-4 font-medium text-green-800 bg-green-100 border border-green-200 rounded-md">
+                {{ session('message') }}
             </div>
-
-            <div class="flex items-center justify-end space-x-4 mt-6">
-                @if ($isEditing)
-                    <button wire:click="cancelEdit" type="button"
-                            class="bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-gray-600 transition duration-200">
-                        Batal
-                    </button>
-                @endif
-                <button type="submit"
-                        class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200">
-                    {{ $isEditing ? 'Update Petugas' : 'Simpan Petugas' }}
-                </button>
+        @endif
+        @if (session()->has('error'))
+            <div class="px-4 py-3 mb-4 font-medium text-red-800 bg-red-100 border border-red-200 rounded-md">
+                {{ session('error') }}
             </div>
-        </form>
-    </div>
+        @endif
 
-    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Petugas</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift (BARU)</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($petugasList as $petugas)
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $petugas->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $petugas->nama_petugas }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $petugas->email }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                            @if($petugas->shift == 'Pagi')
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    Pagi
-                                </span>
-                            @elseif($petugas->shift == 'Sore') <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Sore
-                                </span>
-                            @elseif($petugas->shift == 'Malam')
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                    Malam
-                                </span>
-                            @else
-                                <span class="text-gray-400">-</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <button wire:click="edit({{ $petugas->id }})"
-                                    class="text-indigo-600 hover:text-indigo-900">
-                                Edit
-                            </button>
-                            <button wire:click="delete({{ $petugas->id }})"
-                                    wire:confirm="Anda yakin ingin menghapus {{ $petugas->nama_petugas }}?"
-                                    class="text-red-600 hover:text-red-900">
-                                Hapus
-                            </button>
-                        </td>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nama</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Email</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Shift</th>
+                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-right text-gray-500 uppercase">Aksi</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                            Belum ada data petugas.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @forelse ($users as $index => $user)
+                        <tr wire:key="user-{{ $user->id }}">
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $users->firstItem() + $index }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $user->nama_petugas }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $user->email }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 text-xs font-semibold leading-5 
+                                    @if($user->shift == 'Pagi') bg-blue-100 text-blue-800
+                                    @elseif($user->shift == 'Sore') bg-yellow-100 text-yellow-800
+                                    @elseif($user->shift == 'Malam') bg-gray-700 text-gray-100
+                                    @else bg-gray-100 text-gray-800
+                                    @endif
+                                    rounded-full">
+                                    {{ $user->shift ?? 'N/A' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                                <button wire:click="edit({{ $user->id }})" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                                <button wire:click="confirmDelete({{ $user->id }})" class="ml-4 text-red-600 hover:text-red-900">Hapus</button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-sm text-center text-gray-500">
+                                Tidak ada data petugas.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-6">
+            {{ $users->links() }}
+        </div>
     </div>
 </div>

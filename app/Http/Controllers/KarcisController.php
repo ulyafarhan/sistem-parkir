@@ -40,7 +40,7 @@ class KarcisController extends Controller
             'id_jenis_fk' => $jenis->id_jenis,
         ]);
 
-        return redirect()->route('karcis.show', ['id_tiket' => $transaksi->id_tiket]);
+        return redirect()->route('karcis.show', ['id_tiket' => $transaksi->id_tiket ])->with('success','');
     }
 
     public function show($id_tiket)
