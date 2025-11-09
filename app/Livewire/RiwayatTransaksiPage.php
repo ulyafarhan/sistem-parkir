@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Transaksi;
-use Livewire\WithPagination; // Kita tambahkan pagination
+use Livewire\WithPagination;
 
 class RiwayatTransaksiPage extends Component
 {
@@ -12,10 +12,9 @@ class RiwayatTransaksiPage extends Component
 
     public function render()
     {
-        // Ambil data transaksi, urutkan dari yang terbaru, dan beri pagination
-        $transaksis = Transaksi::with(['jenisKendaraan', 'petugas']) // Load relasi
-                                ->latest() // Urutkan dari terbaru
-                                ->paginate(10); // 10 data per halaman
+        $transaksis = Transaksi::with(['jenisKendaraan', 'petugas'])
+                                ->latest()
+                                ->paginate(10);
 
         return view('livewire.riwayat-transaksi-page', [
             'transaksis' => $transaksis

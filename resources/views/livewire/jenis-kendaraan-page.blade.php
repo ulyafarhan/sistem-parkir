@@ -5,7 +5,6 @@
         <p class="text-gray-600 mb-6">Klik tombol di bawah ini untuk mensimulasikan kendaraan masuk dan men-generate karcis QR Code.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach ($jenisList as $jenis)
-                {{-- Ini adalah link, bukan tombol livewire, dengan target="_blank" --}}
                 <a href="{{ route('karcis.generate', ['id_jenis' => $jenis->id_jenis]) }}"
                 target="_blank"
                 class="block text-center bg-blue-600 text-white font-bold py-6 px-8 rounded-lg shadow-xl 

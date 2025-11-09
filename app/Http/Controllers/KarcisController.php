@@ -15,11 +15,12 @@ class KarcisController extends Controller
     public function download($id_tiket)
     {
         $transaksi = Transaksi::findOrFail($id_tiket);
-        $view = view('karcis', ['transaksi' => $transaksi])->render();
+        $view = view('karcis-printable', ['transaksi' => $transaksi])->render();
 
         $path = storage_path('app/karcis-' . $id_tiket . '.png');
-        Browsershot::html($view)->save($path);
-
+        Browsershot::html($view)
+            ->select('#karcis-untuk-download')
+            ->save($path);
         return response()->download($path)->deleteFileAfterSend(true);
     }
     public function generate($id_jenis)

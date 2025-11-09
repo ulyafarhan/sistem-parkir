@@ -12,7 +12,6 @@
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
-                    {{-- Nama Petugas --}}
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 font-medium mb-2">
                             Nama Petugas
@@ -24,8 +23,6 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    {{-- Email --}}
                     <div class="mb-4">
                         <label for="email" class="block text-gray-700 font-medium mb-2">
                             Email
@@ -37,8 +34,6 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    {{-- Password --}}
                     <div class="mb-4">
                         <label for="password" class="block text-gray-700 font-medium mb-2">
                             Password
@@ -50,8 +45,6 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    {{-- Confirm Password --}}
                     <div class="mb-6">
                         <label for="password-confirm" class="block text-gray-700 font-medium mb-2">
                             Konfirmasi Password
@@ -60,8 +53,6 @@
                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
                                name="password_confirmation" required autocomplete="new-password">
                     </div>
-
-                    {{-- Submit --}}
                     <div>
                         <button type="submit" 
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">

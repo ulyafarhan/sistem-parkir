@@ -7,11 +7,6 @@ use App\Models\JenisKendaraan;
 
 class JenisKendaraanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         JenisKendaraan::create([

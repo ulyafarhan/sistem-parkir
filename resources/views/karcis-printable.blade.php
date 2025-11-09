@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-200 flex items-center justify-center min-h-screen p-4">
 
-    <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+    <div id="karcis-untuk-download" class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
         
         <div class="text-center border-b-2 border-dashed border-gray-300 pb-4 mb-4">
             <h1 class="text-2xl font-bold text-gray-800">KARCIS PARKIR DIGITAL</h1>
@@ -16,7 +16,7 @@
         </div>
 
         <div class="mb-4">
-            <div class="flex justify-between items-center mb-2 mt-4">
+            <div class="flex justify-between items-center mb-2">
                 <span class="text-gray-600 font-medium">Jenis Kendaraan:</span>
                 <span class="text-xl font-bold text-gray-900">
                     {{ $transaksi->jenisKendaraan->nama_jenis }}
@@ -49,22 +49,10 @@
             </p>
         </div>
 
-        <a href="{{ route('karcis.download', ['id_tiket' => $transaksi->id_tiket]) }}" 
-           class="
-            block w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg shadow
-            hover:bg-blue-700 transition duration-200 mb-4 text-center
-        ">
-            Download Karcis
-        </a>
-
         <p class="text-sm text-red-600 text-center font-medium">
             Simpan karcis ini untuk proses keluar.
         </p>
     </div>
-
-    <script>
-        
-    </script>
 
 </body>
 </html>

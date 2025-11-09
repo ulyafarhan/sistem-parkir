@@ -10,32 +10,12 @@ class Transaksi extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel yang digunakan oleh model.
-     *
-     * @var string
-     */
-    protected $table = 'tabel_transaksi'; // Pastikan ini sesuai dengan migrasi
+    protected $table = 'tabel_transaksi';
 
-    /**
-     * Primary key dari tabel.
-     *
-     * @var string
-     */
     protected $primaryKey = 'id_tiket';
 
-    /**
-     * Tipe data primary key.
-     *
-     * @var string
-     */
     protected $keyType = 'string';
 
-    /**
-     * Indicates if the model's ID is auto-incrementing.
-     *
-     * @var bool
-     */
     public $incrementing = false;
 
     protected $casts = [
@@ -51,21 +31,13 @@ class Transaksi extends Model
         'id_petugas_fk',
     ];
 
-    /**
-     * Relasi ke JenisKendaraan.
-     */
     public function jenisKendaraan()
     {
         return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk', 'id_jenis');
     }
 
-    /**
-     * Relasi ke Petugas (User).
-     * INI ADALAH PERBAIKANNYA
-     */
     public function petugas()
     {
-        // Ubah App\Models\Petugas::class menjadi User::class
         return $this->belongsTo(User::class, 'id_petugas_fk', 'id');
     }
 }

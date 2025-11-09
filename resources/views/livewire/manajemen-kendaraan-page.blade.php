@@ -68,7 +68,7 @@
                             Tidak ada data.
                         </td>
                     </tr>
-                @endforelse {{-- <-- PERBAIKAN: Mengganti @endflese menjadi @endforelse --}}
+                @endforelse
             </tbody>
         </table>
     </div>

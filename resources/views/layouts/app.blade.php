@@ -71,10 +71,8 @@
     </nav>
     
     <main class="container mx-auto p-4 sm:p-6 lg:p-8">
-        {{-- Menggunakan @yield('slot') agar konsisten dengan @section('slot') --}}
         @yield('slot')
         
-        {{-- $slot digunakan jika layout ini dipakai sebagai komponen Livewire/Blade --}}
         {{ $slot ?? '' }}
     </main>
 
