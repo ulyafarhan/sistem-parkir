@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate ERD PNG</title>
+</head>
+<body>
+    <canvas id="erdCanvas" width="1200" height="900" style="border: 1px solid #ccc;"></canvas>
+    <br>
+    <button onclick="downloadPNG()">Download PNG</button>
+    
+    <script>
+        const canvas = document.getElementById('erdCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Warna
+        const colors = {
+            background: '#f8fafc',
+            black: '#1e293b',
+            blue: '#3b82f6',
+            lightBlue: '#dbeafe',
+            green: '#22c55e',
+            lightGreen: '#dcfce7',
+            purple: '#a855f7',
+            lightPurple: '#f3e8ff',
+            gray: '#64748b',
+            red: '#dc2626'
+        };
+        
+        // Background
+        ctx.fillStyle = colors.background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Judul
+        ctx.fillStyle = colors.black;
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Entity Relationship Diagram - Sistem Parkir QR Code', canvas.width / 2, 40);
+        
+        // Fungsi untuk membuat tabel
+        function drawTable(x, y, width, height, title, color, bgColor, attributes) {
+            // Tabel background
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(x, y, width, height);
+            
+            // Border tabel
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x, y, width, height);
+            
+            // Header tabel
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, 50);
+            
+            // Judul tabel
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(title, x + width / 2, y + 30);
+            
+            // Atribut
+            ctx.fillStyle = colors.black;
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'left';
+            attributes.forEach((attr, index) => {
+                ctx.fillText(attr, x + 20, y + 70 + (index * 25));
+            });
+        }
+        
+        // Tabel Users
+        drawTable(50, 100, 300, 350, 'users', colors.blue, colors.lightBlue, [
+            'id (PK) - BIGINT, AUTO_INCREMENT',
+            'name - VARCHAR(255)',
+            'email - VARCHAR(255), UNIQUE',
+            'password - VARCHAR(255)',
+            'role - ENUM("admin", "operator")',
+            'shift - VARCHAR(50)',
+            'created_at - TIMESTAMP',
+            'updated_at - TIMESTAMP',
+            'deleted_at - TIMESTAMP (nullable)'
+        ]);
+        
+        // Tabel Jenis Kendaraan
+        drawTable(850, 100, 300, 280, 'jenis_kendaraan', colors.green, colors.lightGreen, [
+            'id (PK) - BIGINT, AUTO_INCREMENT',
+            'nama_kendaraan - VARCHAR(100)',
+            'tarif_per_jam - DECIMAL(10,2)',
+            'tarif_per_hari - DECIMAL(10,2)',
+            'created_at - TIMESTAMP',
+            'updated_at - TIMESTAMP',
+            'deleted_at - TIMESTAMP (nullable)'
+        ]);
+        
+        // Tabel Transaksi
+        drawTable(450, 500, 300, 350, 'transaksi', colors.purple, colors.lightPurple, [
+            'id (PK) - BIGINT, AUTO_INCREMENT',
+            'qr_code - VARCHAR(255), UNIQUE',
+            'jenis_kendaraan_id (FK) - BIGINT',
+            'plat_nomor - VARCHAR(20)',
+            'jam_masuk - DATETIME',
+            'jam_keluar - DATETIME (nullable)',
+            'tarif - DECIMAL(10,2)',
+            'user_id (FK) - BIGINT',
+            'created_at - TIMESTAMP',
+            'updated_at - TIMESTAMP'
+        ]);
+        
+        // Fungsi untuk menggambar relasi
+        function drawRelation(x1, y1, x2, y2, label1, label2) {
+            ctx.strokeStyle = colors.black;
+            ctx.lineWidth = 3;
+            
+            // Garis vertikal dari tabel 1
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x1, y1 + 50);
+            ctx.stroke();
+            
+            // Garis horizontal
+            ctx.beginPath();
+            ctx.moveTo(x1, y1 + 50);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            
+            // Garis vertikal ke tabel 2
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            
+            // Label 1:N
+            ctx.fillStyle = colors.black;
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(label1, (x1 + x2) / 2 - 50, y1 + 45);
+            ctx.fillText(label2, (x1 + x2) / 2 + 50, y1 + 45);
+            
+            // Crow's foot notation
+            ctx.beginPath();
+            ctx.moveTo(x2 - 20, y2 - 10);
+            ctx.lineTo(x2, y2);
+            ctx.moveTo(x2 - 20, y2 + 10);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+        
+        // Relasi Users ke Transaksi (1:N)
+        drawRelation(200, 450, 600, 500, '1', 'N');
+        
+        // Relasi Jenis Kendaraan ke Transaksi (1:N)
+        drawRelation(1000, 380, 750, 500, '1', 'N');
+        
+        // Legend
+        ctx.fillStyle = 'white';
+        ctx.fillRect(50, 750, 350, 120);
+        ctx.strokeStyle = colors.gray;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(50, 750, 350, 120);
+        
+        ctx.fillStyle = colors.black;
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText('Legend:', 60, 770);
+        
+        ctx.font = '14px Arial';
+        ctx.fillStyle = colors.red;
+        ctx.fillText('Merah: Foreign Key (Kunci Asing)', 60, 790);
+        ctx.fillStyle = colors.gray;
+        ctx.fillText('Abu-abu: Timestamp (Waktu)', 60, 810);
+        ctx.fillStyle = colors.black;
+        ctx.fillText('Hitam: Field/Atribut Biasa', 60, 830);
+        ctx.fillText('1:N = One to Many Relationship', 60, 850);
+        
+        // Fungsi untuk download PNG
+        function downloadPNG() {
+            const link = document.createElement('a');
+            link.download = 'erd-sistem-parkir.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Export fungsi
+        window.downloadPNG = downloadPNG;
+        
+        // Otomatis download saat halaman dimuat (opsional)
+        // downloadPNG();
+    </script>
+</body>
+</html>

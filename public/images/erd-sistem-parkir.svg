@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1e293b">
+    Entity Relationship Diagram - Sistem Parkir QR Code
+  </text>
+  
+  <!-- Users Table -->
+  <rect x="50" y="80" width="200" height="280" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <rect x="50" y="80" width="200" height="40" fill="#3b82f6" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="150" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+    users
+  </text>
+  
+  <!-- Users attributes -->
+  <text x="60" y="140" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">id (PK)</text>
+  <text x="60" y="160" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">name</text>
+  <text x="60" y="180" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">email</text>
+  <text x="60" y="200" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">password</text>
+  <text x="60" y="220" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">role</text>
+  <text x="60" y="240" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">shift</text>
+  <text x="60" y="260" font-family="Arial, sans-serif" font-size="12" fill="#64748b">created_at</text>
+  <text x="60" y="280" font-family="Arial, sans-serif" font-size="12" fill="#64748b">updated_at</text>
+  
+  <!-- Jenis Kendaraan Table -->
+  <rect x="550" y="80" width="200" height="240" fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <rect x="550" y="80" width="200" height="40" fill="#22c55e" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="650" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+    jenis_kendaraan
+  </text>
+  
+  <!-- Jenis Kendaraan attributes -->
+  <text x="560" y="140" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">id (PK)</text>
+  <text x="560" y="160" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">nama_kendaraan</text>
+  <text x="560" y="180" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">tarif_per_jam</text>
+  <text x="560" y="200" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">tarif_per_hari</text>
+  <text x="560" y="220" font-family="Arial, sans-serif" font-size="12" fill="#64748b">created_at</text>
+  <text x="560" y="240" font-family="Arial, sans-serif" font-size="12" fill="#64748b">updated_at</text>
+  
+  <!-- Transaksi Table -->
+  <rect x="300" y="400" width="200" height="280" fill="#f3e8ff" stroke="#a855f7" stroke-width="2" rx="8"/>
+  <rect x="300" y="400" width="200" height="40" fill="#a855f7" stroke="#a855f7" stroke-width="2" rx="8"/>
+  <text x="400" y="425" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+    transaksi
+  </text>
+  
+  <!-- Transaksi attributes -->
+  <text x="310" y="460" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">id (PK)</text>
+  <text x="310" y="480" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">qr_code</text>
+  <text x="310" y="500" font-family="Arial, sans-serif" font-size="12" fill="#dc2626">jenis_kendaraan_id (FK)</text>
+  <text x="310" y="520" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">plat_nomor</text>
+  <text x="310" y="540" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">jam_masuk</text>
+  <text x="310" y="560" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">jam_keluar</text>
+  <text x="310" y="580" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">tarif</text>
+  <text x="310" y="600" font-family="Arial, sans-serif" font-size="12" fill="#dc2626">user_id (FK)</text>
+  <text x="310" y="620" font-family="Arial, sans-serif" font-size="12" fill="#64748b">created_at</text>
+  <text x="310" y="640" font-family="Arial, sans-serif" font-size="12" fill="#64748b">updated_at</text>
+  
+  <!-- Relationships -->
+  <!-- users to transaksi -->
+  <line x1="150" y1="360" x2="150" y2="400" stroke="#64748b" stroke-width="2"/>
+  <line x1="150" y1="400" x2="400" y2="400" stroke="#64748b" stroke-width="2"/>
+  <line x1="400" y1="400" x2="400" y2="400" stroke="#64748b" stroke-width="2"/>
+  
+  <!-- Crow's foot notation for users to transaksi -->
+  <line x1="380" y1="390" x2="400" y2="400" stroke="#64748b" stroke-width="2"/>
+  <line x1="380" y1="410" x2="400" y2="400" stroke="#64748b" stroke-width="2"/>
+  <text x="275" y="395" font-family="Arial, sans-serif" font-size="10" fill="#64748b">1</text>
+  <text x="275" y="415" font-family="Arial, sans-serif" font-size="10" fill="#64748b">N</text>
+  
+  <!-- jenis_kendaraan to transaksi -->
+  <line x1="650" y1="320" x2="650" y2="400" stroke="#64748b" stroke-width="2"/>
+  <line x1="650" y1="400" x2="500" y2="400" stroke="#64748b" stroke-width="2"/>
+  
+  <!-- Crow's foot notation for jenis_kendaraan to transaksi -->
+  <line x1="520" y1="390" x2="500" y2="400" stroke="#64748b" stroke-width="2"/>
+  <line x1="520" y1="410" x2="500" y2="400" stroke="#64748b" stroke-width="2"/>
+  <text x="575" y="395" font-family="Arial, sans-serif" font-size="10" fill="#64748b">1</text>
+  <text x="575" y="415" font-family="Arial, sans-serif" font-size="10" fill="#64748b">N</text>
+  
+  <!-- Legend -->
+  <rect x="50" y="500" width="200" height="100" fill="white" stroke="#e2e8f0" stroke-width="1" rx="4"/>
+  <text x="60" y="520" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e293b">Legend:</text>
+  <text x="60" y="540" font-family="Arial, sans-serif" font-size="10" fill="#dc2626">Merah: Foreign Key</text>
+  <text x="60" y="555" font-family="Arial, sans-serif" font-size="10" fill="#64748b">Abu-abu: Timestamp</text>
+  <text x="60" y="570" font-family="Arial, sans-serif" font-size="10" fill="#1e293b">Hitam: Regular Field</text>
+  <text x="60" y="585" font-family="Arial, sans-serif" font-size="10" fill="#1e293b">1:N = One to Many</text>
+</svg>

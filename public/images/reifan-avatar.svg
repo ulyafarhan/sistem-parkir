@@ -1,0 +1,37 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="face-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="98" fill="url(#bg-gradient)" stroke="#e5e7eb" stroke-width="2"/>
+  
+  <!-- Face -->
+  <circle cx="100" cy="90" r="45" fill="url(#face-gradient)"/>
+  
+  <!-- Hair -->
+  <path d="M65 65 Q100 45 135 65 Q140 70 135 80 L65 80 Q60 70 65 65" fill="#4b5563"/>
+  
+  <!-- Eyes -->
+  <circle cx="85" cy="85" r="4" fill="#1f2937"/>
+  <circle cx="115" cy="85" r="4" fill="#1f2937"/>
+  
+  <!-- Eyebrows -->
+  <path d="M80 80 Q85 78 90 80" stroke="#4b5563" stroke-width="2" fill="none"/>
+  <path d="M110 80 Q115 78 120 80" stroke="#4b5563" stroke-width="2" fill="none"/>
+  
+  <!-- Smile -->
+  <path d="M85 100 Q100 110 115 100" stroke="#1f2937" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Tech glasses -->
+  <circle cx="85" cy="85" r="12" fill="none" stroke="#1f2937" stroke-width="2"/>
+  <circle cx="115" cy="85" r="12" fill="none" stroke="#1f2937" stroke-width="2"/>
+  <line x1="97" y1="85" x2="103" y2="85" stroke="#1f2937" stroke-width="2"/>
+</svg>
