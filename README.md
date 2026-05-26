@@ -1,59 +1,76 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Parkir
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem parkir ini adalah aplikasi web yang dibangun menggunakan Laravel untuk mengelola kendaraan yang masuk dan keluar dari area parkir, serta menghitung biaya parkir secara otomatis.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+*   **Manajemen Petugas**: Mengelola data petugas yang bertanggung jawab di setiap pos.
+*   **Manajemen Jenis Kendaraan**: Mengatur jenis kendaraan (misalnya, motor, mobil) beserta tarif parkir per hari.
+*   **Pencatatan Transaksi**: Mencatat setiap kendaraan yang masuk dan keluar, lengkap dengan waktu dan petugas yang melayani.
+*   **Perhitungan Biaya Otomatis**: Sistem secara otomatis menghitung total biaya parkir berdasarkan durasi dan jenis kendaraan.
+*   **Laporan Riwayat Transaksi**: Menyediakan laporan lengkap mengenai semua transaksi yang pernah terjadi.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Entity-Relationship Diagram (ERD)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+ERD berikut ini menggambarkan bagaimana tabel-tabel dalam basis data saling terhubung. Diagram ini didasarkan pada file migrasi dan model Eloquent yang ada di dalam proyek.
 
-## Learning Laravel
+### Tabel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+1.  **`users`**
+    *   **File Model**: `app/Models/User.php`
+    *   **File Migrasi**: `database/migrations/0001_01_01_000000_create_users_table.php`
+    *   **Deskripsi**: Menyimpan data petugas yang memiliki akses ke sistem.
+    *   **Kolom**:
+        *   `id`: *Primary Key*
+        *   `nama_petugas`: Nama lengkap petugas.
+        *   `email`: Alamat email untuk login.
+        *   `password`: Kata sandi yang sudah di-hash.
+        *   `shift`: Jadwal kerja petugas.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2.  **`tabel_jenis_kendaraan`**
+    *   **File Model**: `app/Models/JenisKendaraan.php`
+    *   **File Migrasi**: `database/migrations/2025_11_07_134122_create_tabel_jenis_kendaraan_table.php`
+    *   **Deskripsi**: Menyimpan informasi mengenai jenis kendaraan dan tarifnya.
+    *   **Kolom**:
+        *   `id_jenis`: *Primary Key*
+        *   `nama_jenis`: Nama jenis kendaraan (contoh: "Motor", "Mobil").
+        *   `tarif_per_hari`: Biaya parkir untuk satu hari penuh.
 
-## Laravel Sponsors
+3.  **`tabel_transaksi`**
+    *   **File Model**: `app/Models/Transaksi.php`
+    *   **File Migrasi**: `database/migrations/2025_11_07_134232_create_tabel_transaksi_table.php`
+    *   **Deskripsi**: Mencatat semua aktivitas parkir.
+    *   **Kolom**:
+        *   `id_tiket`: *Primary Key*, nomor unik untuk setiap tiket parkir.
+        *   `jam_masuk`: Waktu saat kendaraan masuk.
+        *   `jam_keluar`: Waktu saat kendaraan keluar.
+        *   `total_biaya`: Total biaya parkir yang harus dibayar.
+        *   `id_jenis_fk`: *Foreign Key* yang terhubung ke `tabel_jenis_kendaraan`.
+        *   `id_petugas_fk`: *Foreign Key* yang terhubung ke `users`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Relasi
 
-### Premium Partners
+*   **Satu Petugas ke Banyak Transaksi**: Satu `User` (petugas) dapat melayani banyak `Transaksi`.
+    *   Relasi ini didefinisikan dalam model <mcsymbol name="transaksi" filename="User.php" path="c:\laragon\www\sistem-parkir\app\Models\User.php" startline="37" type="function"></mcsymbol>.
+*   **Satu Jenis Kendaraan ke Banyak Transaksi**: Satu `JenisKendaraan` dapat dimiliki oleh banyak `Transaksi`.
+    *   Relasi ini didefinisikan dalam model <mcsymbol name="transaksi" filename="JenisKendaraan.php" path="c:\laragon\www\sistem-parkir\app\Models\JenisKendaraan.php" startline="22" type="function"></mcsymbol>.
+*   **Satu Transaksi Milik Satu Petugas**: Setiap `Transaksi` dicatat oleh satu `User` (petugas).
+    *   Relasi ini didefinisikan dalam model <mcsymbol name="petugas" filename="Transaksi.php" path="c:\laragon\www\sistem-parkir\app\Models\Transaksi.php" startline="38" type="function"></mcsymbol>.
+*   **Satu Transaksi Milik Satu Jenis Kendaraan**: Setiap `Transaksi` terikat pada satu `JenisKendaraan`.
+    *   Relasi ini didefinisikan dalam model <mcsymbol name="jenisKendaraan" filename="Transaksi.php" path="c:\laragon\www\sistem-parkir\app\Models\Transaksi.php" startline="33" type="function"></mcsymbol>.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Cara Kerja Sistem
 
-## Contributing
+1.  **Kendaraan Masuk**:
+    *   Petugas memilih jenis kendaraan.
+    *   Sistem menghasilkan `id_tiket` unik dan mencatat `jam_masuk`.
+    *   Data transaksi baru disimpan di `tabel_transaksi` dengan `jam_keluar` dan `total_biaya` masih kosong.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2.  **Kendaraan Keluar**:
+    *   Petugas memasukkan `id_tiket`.
+    *   Sistem mencari data transaksi, mencatat `jam_keluar`, dan menghitung durasi parkir.
+    *   `total_biaya` dihitung berdasarkan `tarif_per_hari` dari `tabel_jenis_kendaraan` dan durasi parkir.
+    *   Data transaksi diperbarui, dan petugas yang melayani (`id_petugas_fk`) dicatat.
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3.  **Laporan**:
+    *   Admin atau manajer dapat melihat seluruh riwayat transaksi yang tersimpan di `tabel_transaksi` untuk keperluan audit atau analisis.

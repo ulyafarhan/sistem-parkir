@@ -1,0 +1,42 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient-female" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f472b6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="face-gradient-female" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fde68a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="98" fill="url(#bg-gradient-female)" stroke="#e5e7eb" stroke-width="2"/>
+  
+  <!-- Face -->
+  <circle cx="100" cy="90" r="45" fill="url(#face-gradient-female)"/>
+  
+  <!-- Hair -->
+  <path d="M65 60 Q100 40 135 60 Q145 70 140 85 L60 85 Q55 75 65 60" fill="#8b5cf6"/>
+  
+  <!-- Eyes -->
+  <circle cx="85" cy="85" r="4" fill="#1f2937"/>
+  <circle cx="115" cy="85" r="4" fill="#1f2937"/>
+  
+  <!-- Long eyelashes -->
+  <line x1="82" y1="80" x2="80" y2="76" stroke="#1f2937" stroke-width="1"/>
+  <line x1="88" y1="80" x2="90" y2="76" stroke="#1f2937" stroke-width="1"/>
+  <line x1="112" y1="80" x2="110" y2="76" stroke="#1f2937" stroke-width="1"/>
+  <line x1="118" y1="80" x2="120" y2="76" stroke="#1f2937" stroke-width="1"/>
+  
+  <!-- Smile -->
+  <path d="M85 100 Q100 110 115 100" stroke="#1f2937" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Design tool icon (representing UI/UX) -->
+  <g transform="translate(140, 140)">
+    <circle cx="0" cy="0" r="20" fill="white" stroke="#8b5cf6" stroke-width="2"/>
+    <path d="M-8,-5 L-3,5 L3,5 L8,-5 Z" fill="#8b5cf6"/>
+    <circle cx="-5" cy="-8" r="3" fill="#ec4899"/>
+    <circle cx="5" cy="-8" r="3" fill="#fbbf24"/>
+  </g>
+</svg>

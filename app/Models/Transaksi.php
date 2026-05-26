@@ -1,18 +1,27 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 
 class Transaksi extends Model
 {
     use HasFactory;
+
     protected $table = 'tabel_transaksi';
+
     protected $primaryKey = 'id_tiket';
-    public $incrementing = false;
+
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
+    protected $casts = [
+        'jam_masuk' => 'datetime',
+        'jam_keluar' => 'datetime',
+    ];
     protected $fillable = [
         'id_tiket',
         'jam_masuk',
@@ -22,19 +31,13 @@ class Transaksi extends Model
         'id_petugas_fk',
     ];
 
-    /**
-     * Relasi N:1 ke JenisKendaraan (Satu Transaksi punya satu Jenis)
-     */
-    public function jenisKendaraan(): BelongsTo
+    public function jenisKendaraan()
     {
-        return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk');
+        return $this->belongsTo(JenisKendaraan::class, 'id_jenis_fk', 'id_jenis');
     }
 
-    /**
-     * Relasi N:1 ke User/Petugas (Satu Transaksi di-handle satu Petugas)
-     */
-    public function petugas(): BelongsTo
+    public function petugas()
     {
-        return $this->belongsTo(User::class, 'id_petugas_fk');
+        return $this->belongsTo(User::class, 'id_petugas_fk', 'id');
     }
 }
